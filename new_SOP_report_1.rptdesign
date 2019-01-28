@@ -117,7 +117,27 @@ if ( (reportContext.getParameterValue("usepagebreaks") == "false")|| reportConte
     </data-sources>
     <data-sets>
         <script-data-set name="dataSet" id="5">
-            <structure name="cachedMetaData"/>
+            <list-property name="resultSetHints">
+                <structure>
+                    <property name="position">1</property>
+                    <property name="name">wonum</property>
+                    <property name="dataType">string</property>
+                </structure>
+            </list-property>
+            <list-property name="columnHints">
+                <structure>
+                    <property name="columnName">wonum</property>
+                </structure>
+            </list-property>
+            <structure name="cachedMetaData">
+                <list-property name="resultSet">
+                    <structure>
+                        <property name="position">1</property>
+                        <property name="name">wonum</property>
+                        <property name="dataType">string</property>
+                    </structure>
+                </list-property>
+            </structure>
             <property name="dataSource">maximoDataSource</property>
             <method name="open"><![CDATA[maximoDataSet = MXReportDataSetProvider.create(this.getDataSource().getName(), this.getName());
 maximoDataSet.open();
@@ -125,9 +145,10 @@ maximoDataSet.open();
 var sqlText = new String();
 
 // Add query to sqlText variable.
-sqlText = "select textfield, datefield from table"
+sqlText = "select wonum from workorder"
 // Include the Maximo where clause
-+ " where " + params["where"]
+//+ " where " + params["where"]
++ " where wonum = '649754' "
 ;
 
 maximoDataSet.setQuery(sqlText);]]></method>
@@ -136,8 +157,8 @@ maximoDataSet.setQuery(sqlText);]]></method>
 
 // Add a line for each output column
 // The specific get method should match the data type of the output column.
-row["textfield"] = maximoDataSet.getString("textfield");	
-row["datefield"] = maximoDataSet.getTimestamp("datefield");	
+row["wonum"] = maximoDataSet.getString("wonum");	
+//row["datefield"] = maximoDataSet.getTimestamp("datefield");	
 
 return (true);]]></method>
         </script-data-set>
@@ -183,6 +204,12 @@ return (true);]]></method>
                     <property name="name">total_rec</property>
                     <expression name="expression">Total.count()</expression>
                     <property name="dataType">any</property>
+                </structure>
+                <structure>
+                    <property name="name">wonum</property>
+                    <text-property name="displayName">wonum</text-property>
+                    <expression name="expression" type="javascript">dataSetRow["wonum"]</expression>
+                    <property name="dataType">string</property>
                 </structure>
             </list-property>
             <property name="pageBreakInterval">50</property>
@@ -250,7 +277,9 @@ return (true);]]></method>
                     <property name="style">tabledetailslabel</property>
                     <cell id="80">
                         <property name="style">tabledetailslabelcell</property>
-                        <label id="96"/>
+                        <label id="96">
+                            <text-property name="text">Work Order</text-property>
+                        </label>
                     </cell>
                     <cell id="76">
                         <property name="style">tabledetailslabelcell</property>
@@ -274,6 +303,9 @@ return (true);]]></method>
                     <property name="style">tabledetailsdatarow</property>
                     <cell id="81">
                         <property name="style">tabledetailsdatacell</property>
+                        <data id="343">
+                            <property name="resultSetColumn">wonum</property>
+                        </data>
                     </cell>
                     <cell id="77">
                         <property name="style">tabledetailsdatacell</property>
